@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Compilar e Executar C",
+        "type": "shell",
+        "command": "gcc",
+        "args": [
+          "-o",
+          "EDA-T2-IgorLucasThiago",
+          "EDA-T2-IgorLucasThiago.c"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Executar Programa sem Graphviz",
+        "type": "shell",
+        "command": "${workspaceFolder}/main.exe",
+        "dependsOn": "Compilar e Executar C",
+        "group": {
+          "kind": "test",
+          "isDefault": true
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+  
