@@ -1,0 +1,75 @@
+//  Grupo : Thiago Manhaaes da Conceicao, Igor Monteiro Magro, Lucas Diniz Ferraz
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+// Função que retorna a menor cor disponível que não está em vizinhos
+int obterCorDisponivel(int vertice, int totalVertices, int grafo[MAX][MAX], int cor[]) {
+    int corDisponivel[MAX];
+    for (int i = 0; i < totalVertices; i++)
+        corDisponivel[i] = 1;
+
+    for (int i = 0; i < totalVertices; i++) {
+        if (grafo[vertice][i] && cor[i] != -1) {
+            corDisponivel[cor[i]] = 0;
+        }
+    }
+
+    for (int c = 0; c < totalVertices; c++) {
+        if (corDisponivel[c])
+            return c;
+    }
+
+    return -1;
+}
+
+int main() {
+    FILE *arquivoEntrada = fopen("grafo.txt", "r");
+    if (!arquivoEntrada) {
+        printf("Erro ao abrir o arquivo de entrada.\n");
+        return 1;
+    }
+
+    int totalVertices, totalArestas;
+    fscanf(arquivoEntrada, "%d %d", &totalVertices, &totalArestas);
+
+    int grafo[MAX][MAX];
+    for (int i = 0; i < totalVertices; i++)
+        for (int j = 0; j < totalVertices; j++)
+            fscanf(arquivoEntrada, "%d", &grafo[i][j]);
+
+    fclose(arquivoEntrada);
+
+    int cor[MAX];
+    for (int i = 0; i < totalVertices; i++)
+        cor[i] = -1;
+
+    // Algoritmo guloso de coloração
+    for (int v = 0; v < totalVertices; v++) {
+        int corEscolhida = obterCorDisponivel(v, totalVertices, grafo, cor);
+        cor[v] = corEscolhida;
+    }
+
+    // Mostra na tela
+    printf("Coloração dos vértices:\n");
+    for (int i = 0; i < totalVertices; i++)
+        printf("Vértice %d -> Cor %d\n", i, cor[i]);
+
+    // Escreve em arquivo de saída
+    FILE *arquivoSaida = fopen("cores.txt", "w");
+    if (!arquivoSaida) {
+        printf("Erro ao criar o arquivo de saída.\n");
+        return 1;
+    }
+
+    for (int i = 0; i < totalVertices; i++)
+        fprintf(arquivoSaida, "Vértice %d -> Cor %d\n", i, cor[i]);
+
+    fclose(arquivoSaida);
+    printf("Arquivo 'cores.txt' gerado com sucesso.\n");
+
+    return 0;
+}
